@@ -2,10 +2,7 @@ package com.example.miniatures.model;
 
 import com.example.miniatures.model.enums.MiniatureScale;
 import com.example.miniatures.model.enums.MiniatureType;
-import jakarta.persistence.Entity;
-import jakarta.persistence.EnumType;
-import jakarta.persistence.Enumerated;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -21,6 +18,7 @@ import java.time.LocalDate;
 public class MiniatureSale {
 
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     private String Name;

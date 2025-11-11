@@ -21,4 +21,8 @@ public class MiniatureSaleService {
     public List<MiniatureSale> getSales() {
         return miniatureSaleRepository.findAll();
     }
+
+    public MiniatureSale createMiniatureSale(MiniatureSale miniatureSale) {
+        return miniatureSaleRepository.save(miniatureSale);
+    }
 }

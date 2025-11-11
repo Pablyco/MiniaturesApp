@@ -2,6 +2,7 @@ package com.example.miniatures.controller;
 
 import com.example.miniatures.model.MiniatureSale;
 import com.example.miniatures.service.MiniatureSaleService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -12,7 +13,11 @@ import java.util.List;
 @RestController
 public class MiniatureSaleController {
 
-    private MiniatureSaleService miniatureSaleService;
+    private final MiniatureSaleService miniatureSaleService;
+
+    public MiniatureSaleController(MiniatureSaleService miniatureSaleService) {
+        this.miniatureSaleService = miniatureSaleService;
+    }
 
     @GetMapping("/Sales")
     public List<MiniatureSale> getSales() {
@@ -21,7 +26,7 @@ public class MiniatureSaleController {
 
     @PostMapping("/CreateSale")
     public MiniatureSale createSale(@RequestBody MiniatureSale miniatureSale) {
-        return null; //funcion de service
+        return miniatureSaleService.createMiniatureSale(miniatureSale); //funcion de service
     }
 
 
