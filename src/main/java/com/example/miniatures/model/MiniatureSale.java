@@ -21,7 +21,8 @@ public class MiniatureSale {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private String Name;
+    private String name;
+    private String clientName;
     private BigDecimal price;
     private LocalDate saleDate;
 

@@ -2,6 +2,7 @@ package com.example.miniatures.service;
 
 import com.example.miniatures.exception.ResourceNotFoundException;
 import com.example.miniatures.model.MiniatureSale;
+import com.example.miniatures.model.enums.MiniatureType;
 import com.example.miniatures.repository.MiniatureSaleRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -21,8 +22,24 @@ public class MiniatureSaleService {
         this.miniatureSaleRepository = miniatureSaleRepository;
     }
 
+    /*
+    *   Find methods
+     */
     public List<MiniatureSale> getSales() {
         return miniatureSaleRepository.findAll();
+    }
+
+    public MiniatureSale getSaleById(long id) {
+        return miniatureSaleRepository.findById(id)
+                .orElseThrow( ()-> new ResourceNotFoundException("Miniature with ID " + id + " not found"));
+    }
+
+    public List<MiniatureSale> getSalesByType(MiniatureType type) {
+        List<MiniatureSale> sales = miniatureSaleRepository.findByType(type);
+        if (sales.isEmpty()) {
+            throw new ResourceNotFoundException("Sales with miniature type " + type + " not found");
+        }
+        return sales;
     }
 
     public MiniatureSale createMiniatureSale(MiniatureSale miniatureSale) {
