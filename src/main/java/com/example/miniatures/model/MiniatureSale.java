@@ -21,8 +21,12 @@ public class MiniatureSale {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @ManyToOne
+    @JoinColumn(name = "client_id", nullable = false)
+    private MiniatureClient client;
+
+
     private String name;
-    private String clientName;
     private BigDecimal price;
     private LocalDate saleDate;
 
