@@ -101,15 +101,6 @@ public class MiniatureSaleService {
     }
 
     /*
-     *  Gets all the sales.
-     */
-    public List<MiniatureSale> getAllSales() {
-        List<MiniatureSale> sales = miniatureSaleRepository.findAll();
-        throwExceptionIfEmpty(sales, "Sales not found");
-        return sales;
-    }
-
-    /*
      * Gets the last 10 sales
      */
     public List<MiniatureSale> getLastSales(){
@@ -117,10 +108,6 @@ public class MiniatureSaleService {
         throwExceptionIfEmpty(sales, "Sales not found");
         return sales;
     }
-
-
-
-
 
     /*
      * Create a new Miniature.
