@@ -38,10 +38,10 @@ public final class MiniatureSaleSpecifications {
         };
     }
 
-    public static Specification<MiniatureSale> clientNameContains(String clientName) {
+    public static Specification<MiniatureSale> hasClientId(Long clientId) {
         return (root, query, cb) -> {
-            if (clientName == null || clientName.isBlank()) return null;
-            return cb.like(cb.lower(root.get("clientName")), "%" + clientName.toLowerCase() + "%");
+            if (clientId == null) return null;
+            return cb.equal(root.get("client").get("id"), clientId);
         };
     }
 
