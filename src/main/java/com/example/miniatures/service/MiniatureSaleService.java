@@ -1,6 +1,9 @@
 package com.example.miniatures.service;
 
+import com.example.miniatures.dto.miniatureClient.MiniatureSaleCreateDTO;
+import com.example.miniatures.dto.miniatureClient.MiniatureSaleResponseDTO;
 import com.example.miniatures.exception.ResourceNotFoundException;
+import com.example.miniatures.model.MiniatureClient;
 import com.example.miniatures.model.MiniatureSale;
 import com.example.miniatures.model.enums.MiniatureScale;
 import com.example.miniatures.model.enums.MiniatureType;
@@ -19,9 +22,11 @@ import java.util.Optional;
 public class MiniatureSaleService {
 
     private final MiniatureSaleRepository miniatureSaleRepository;
+    private final MiniatureClientService miniatureClientService;
 
-    public MiniatureSaleService(MiniatureSaleRepository miniatureSaleRepository) {
+    public MiniatureSaleService(MiniatureSaleRepository miniatureSaleRepository,  MiniatureClientService miniatureClientService) {
         this.miniatureSaleRepository = miniatureSaleRepository;
+        this.miniatureClientService = miniatureClientService;
     }
 
 
@@ -33,7 +38,7 @@ public class MiniatureSaleService {
     public List<MiniatureSale> getSales(
             MiniatureType type,
             MiniatureScale scale,
-            String clientName,
+            Long clientId,
             BigDecimal minPrice,
             BigDecimal maxPrice,
             BigDecimal priceGt,
@@ -60,8 +65,8 @@ public class MiniatureSaleService {
             spec = spec.and(MiniatureSaleSpecifications.hasTypeAndScale(type, scale));
         }
 
-        if(clientName != null) {
-            spec = spec.and(MiniatureSaleSpecifications.clientNameContains(clientName));
+        if(clientId != null) {
+            spec = spec.and(MiniatureSaleSpecifications.hasClientId(clientId));
         }
 
         if(minPrice != null || maxPrice != null){
@@ -112,8 +117,19 @@ public class MiniatureSaleService {
     /*
      * Create a new Miniature.
      */
-    public MiniatureSale createMiniatureSale(MiniatureSale miniatureSale) {
-        return miniatureSaleRepository.save(miniatureSale);
+    public MiniatureSaleResponseDTO createMiniatureSale(MiniatureSaleCreateDTO dto) {
+        MiniatureClient client = miniatureClientService.getClientById(dto.getClientId());
+        MiniatureSale sale = new MiniatureSale();
+
+        sale.setClient(client);
+        sale.setType(dto.getType());
+        sale.setScale(dto.getScale());
+        sale.setPrice(dto.getPrice());
+        sale.setSaleDate(dto.getSaleDate());
+        sale.setName(dto.getName());
+
+        MiniatureSale savedSale = miniatureSaleRepository.save(sale);
+        return toResponseDTO(savedSale);
     }
 
     public Optional<MiniatureSale> getMiniatureSaleById(Long id) {
@@ -143,6 +159,20 @@ public class MiniatureSaleService {
         if (sales.isEmpty()) {
             throw new ResourceNotFoundException(clientName);
         }
+    }
+
+    private static MiniatureSaleResponseDTO toResponseDTO(MiniatureSale sale){
+        MiniatureSaleResponseDTO dto = new MiniatureSaleResponseDTO();
+        dto.setId(sale.getId());
+        dto.setName(sale.getName());
+        dto.setPrice(sale.getPrice());
+        dto.setSaleDate(sale.getSaleDate());
+        dto.setType(sale.getType());
+        dto.setScale(sale.getScale());
+
+        dto.setClientId(sale.getClient().getId());
+        dto.setClientName(sale.getClient().getName());
+        return dto;
     }
 
 }
