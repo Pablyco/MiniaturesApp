@@ -1,9 +1,12 @@
 package com.example.miniatures.controller;
 
+import com.example.miniatures.dto.miniatureClient.MiniatureSaleCreateDTO;
+import com.example.miniatures.dto.miniatureClient.MiniatureSaleResponseDTO;
 import com.example.miniatures.model.MiniatureSale;
 import com.example.miniatures.model.enums.MiniatureScale;
 import com.example.miniatures.model.enums.MiniatureType;
 import com.example.miniatures.service.MiniatureSaleService;
+import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -29,7 +32,7 @@ public class MiniatureSaleController {
     public ResponseEntity<List<MiniatureSale>> getSales(
             @RequestParam(required = false) MiniatureType type,
             @RequestParam(required = false) MiniatureScale scale,
-            @RequestParam(required = false) String clientName,
+            @RequestParam(required = false) Long clientId,
             @RequestParam(required = false) BigDecimal minPrice,
             @RequestParam(required = false) BigDecimal maxPrice,
             @RequestParam(required = false) BigDecimal priceGt,
@@ -39,7 +42,7 @@ public class MiniatureSaleController {
 
     ) {
         var sales = miniatureSaleService.getSales(
-                type,scale,clientName,
+                type,scale,clientId,
                 minPrice,maxPrice,priceGt,
                 priceLt,startDate, endDate
         );
@@ -75,16 +78,16 @@ public class MiniatureSaleController {
     /*
      * Creates a sale.
      */
-    @PostMapping("/CreateSale")
-    public ResponseEntity<MiniatureSale> createSale(@RequestBody MiniatureSale miniatureSale) {
-         MiniatureSale saleCreated = miniatureSaleService.createMiniatureSale(miniatureSale);
+    @PostMapping("/sales")
+    public ResponseEntity<MiniatureSaleResponseDTO> createSale(@Valid @RequestBody MiniatureSaleCreateDTO saleCreateDTO) {
+        MiniatureSaleResponseDTO saleCreated = miniatureSaleService.createMiniatureSale(saleCreateDTO);
         return ResponseEntity.status(201).body(saleCreated);
     }
 
     /*
      * Update a specific sale by id.
      */
-    @PutMapping("/Update/{id}")
+    @PutMapping("/sales/{id}")
     public ResponseEntity<MiniatureSale> updateSaleById(@RequestBody MiniatureSale miniatureSale, @PathVariable Long id) {
         MiniatureSale updatedSale = miniatureSaleService.updateMiniatureSale(miniatureSale,id);
         return ResponseEntity.ok(updatedSale);
@@ -93,7 +96,7 @@ public class MiniatureSaleController {
     /*
      * Delete a specific sale by id.
      */
-    @DeleteMapping("/{id}")
+    @DeleteMapping("sales/{id}")
     public ResponseEntity<Void> deleteSaleByID(@PathVariable Long id) {
         miniatureSaleService.deleteMiniatureSale(id);
         return ResponseEntity.noContent().build();
