@@ -1,7 +1,9 @@
 package com.example.miniatures.service;
 
+import com.example.miniatures.dto.miniatureClient.MiniatureSaleBaseDTO;
 import com.example.miniatures.dto.miniatureClient.MiniatureSaleCreateDTO;
 import com.example.miniatures.dto.miniatureClient.MiniatureSaleResponseDTO;
+import com.example.miniatures.dto.miniatureClient.MiniatureSaleUpdateDTO;
 import com.example.miniatures.exception.ResourceNotFoundException;
 import com.example.miniatures.model.MiniatureClient;
 import com.example.miniatures.model.MiniatureSale;
@@ -35,7 +37,7 @@ public class MiniatureSaleService {
     /*
      * Main Method to help you to obtain sales saved in database.
      */
-    public List<MiniatureSale> getSales(
+    public List<MiniatureSaleResponseDTO> getSales(
             MiniatureType type,
             MiniatureScale scale,
             Long clientId,
@@ -85,7 +87,8 @@ public class MiniatureSaleService {
             spec = spec.and(MiniatureSaleSpecifications.saleDateBetween(startDate,endDate));
         }
 
-        return miniatureSaleRepository.findAll(spec);
+        List<MiniatureSale> sales = miniatureSaleRepository.findAll(spec);
+        return toResponseDTOList(sales);
 
     }
 
@@ -121,12 +124,7 @@ public class MiniatureSaleService {
         MiniatureClient client = miniatureClientService.getClientById(dto.getClientId());
         MiniatureSale sale = new MiniatureSale();
 
-        sale.setClient(client);
-        sale.setType(dto.getType());
-        sale.setScale(dto.getScale());
-        sale.setPrice(dto.getPrice());
-        sale.setSaleDate(dto.getSaleDate());
-        sale.setName(dto.getName());
+        mapDtoToSale(dto,sale,client);
 
         MiniatureSale savedSale = miniatureSaleRepository.save(sale);
         return toResponseDTO(savedSale);
@@ -136,17 +134,17 @@ public class MiniatureSaleService {
         return miniatureSaleRepository.findById(id);
     }
 
-    public MiniatureSale updateMiniatureSale(MiniatureSale miniatureSale, Long id) {
-        return miniatureSaleRepository.findById(id)
-                .map(MiniatureSale->{
-                    MiniatureSale.setName(miniatureSale.getName());
-                    MiniatureSale.setPrice(miniatureSale.getPrice());
-                    MiniatureSale.setSaleDate(LocalDate.now());
-                    MiniatureSale.setType(miniatureSale.getType());
-                    MiniatureSale.setScale(miniatureSale.getScale());
-                    return miniatureSaleRepository.save(MiniatureSale);
-                })
+    public MiniatureSaleResponseDTO updateMiniatureSale(MiniatureSaleUpdateDTO dto, Long id) {
+
+        MiniatureSale foundSale = miniatureSaleRepository.findById(id)
                 .orElseThrow( ()-> new ResourceNotFoundException("Miniature sale with ID " + id + " not found"));
+
+        MiniatureClient client = miniatureClientService.getClientById(dto.getClientId());
+
+        mapDtoToSale(dto,foundSale,client);
+
+        MiniatureSale savedSale = miniatureSaleRepository.save(foundSale);
+        return toResponseDTO(savedSale);
     }
 
     public void deleteMiniatureSale(Long id) {
@@ -155,9 +153,9 @@ public class MiniatureSaleService {
         miniatureSaleRepository.delete(sale);
     }
 
-    private static void throwExceptionIfEmpty(List<MiniatureSale> sales, String clientName) {
+    private static void throwExceptionIfEmpty(List<MiniatureSale> sales, String message) {
         if (sales.isEmpty()) {
-            throw new ResourceNotFoundException(clientName);
+            throw new ResourceNotFoundException(message);
         }
     }
 
@@ -175,4 +173,16 @@ public class MiniatureSaleService {
         return dto;
     }
 
+    private static List<MiniatureSaleResponseDTO> toResponseDTOList(List<MiniatureSale> sales){
+        return sales.stream().map(MiniatureSaleService::toResponseDTO).toList();
+    }
+
+    private void mapDtoToSale(MiniatureSaleBaseDTO dto, MiniatureSale sale, MiniatureClient client){
+        sale.setClient(client);
+        sale.setType(dto.getType());
+        sale.setScale(dto.getScale());
+        sale.setPrice(dto.getPrice());
+        sale.setSaleDate(dto.getSaleDate());
+        sale.setName(dto.getName());
+    }
 }
