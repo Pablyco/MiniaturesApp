@@ -2,6 +2,7 @@ package com.example.miniatures.controller;
 
 import com.example.miniatures.dto.miniatureClient.MiniatureSaleCreateDTO;
 import com.example.miniatures.dto.miniatureClient.MiniatureSaleResponseDTO;
+import com.example.miniatures.dto.miniatureClient.MiniatureSaleUpdateDTO;
 import com.example.miniatures.model.MiniatureSale;
 import com.example.miniatures.model.enums.MiniatureScale;
 import com.example.miniatures.model.enums.MiniatureType;
@@ -29,7 +30,7 @@ public class MiniatureSaleController {
      * Main Method to help you to obtain sales saved in database.
      */
     @GetMapping("/sales")
-    public ResponseEntity<List<MiniatureSale>> getSales(
+    public ResponseEntity<List<MiniatureSaleResponseDTO>> getSales(
             @RequestParam(required = false) MiniatureType type,
             @RequestParam(required = false) MiniatureScale scale,
             @RequestParam(required = false) Long clientId,
@@ -79,8 +80,8 @@ public class MiniatureSaleController {
      * Creates a sale.
      */
     @PostMapping("/sales")
-    public ResponseEntity<MiniatureSaleResponseDTO> createSale(@Valid @RequestBody MiniatureSaleCreateDTO saleCreateDTO) {
-        MiniatureSaleResponseDTO saleCreated = miniatureSaleService.createMiniatureSale(saleCreateDTO);
+    public ResponseEntity<MiniatureSaleResponseDTO> createSale(@Valid @RequestBody MiniatureSaleCreateDTO dto) {
+        MiniatureSaleResponseDTO saleCreated = miniatureSaleService.createMiniatureSale(dto);
         return ResponseEntity.status(201).body(saleCreated);
     }
 
@@ -88,8 +89,8 @@ public class MiniatureSaleController {
      * Update a specific sale by id.
      */
     @PutMapping("/sales/{id}")
-    public ResponseEntity<MiniatureSale> updateSaleById(@RequestBody MiniatureSale miniatureSale, @PathVariable Long id) {
-        MiniatureSale updatedSale = miniatureSaleService.updateMiniatureSale(miniatureSale,id);
+    public ResponseEntity<MiniatureSaleResponseDTO> updateSaleById(@Valid @RequestBody MiniatureSaleUpdateDTO dto, @PathVariable Long id) {
+        MiniatureSaleResponseDTO updatedSale = miniatureSaleService.updateMiniatureSale(dto,id);
         return ResponseEntity.ok(updatedSale);
     }
 
