@@ -13,7 +13,6 @@ import com.example.miniatures.repository.MiniatureSaleRepository;
 import com.example.miniatures.specification.MiniatureSaleSpecifications;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.RequestParam;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
@@ -95,26 +94,19 @@ public class MiniatureSaleService {
     /*
      * Gets a specific sale by its id.
      */
-    public MiniatureSale getSaleById(long id) {
-        return miniatureSaleRepository.findById(id)
+    public MiniatureSaleResponseDTO getSaleById(long id) {
+        MiniatureSale sale = miniatureSaleRepository.findById(id)
                 .orElseThrow( ()-> new ResourceNotFoundException("Miniature Sale with ID " + id + " not found"));
-    }
-
-    /*
-     * Gets the last sale of a client.
-     */
-    public MiniatureSale getLastSaleByClientName(String clientName) {
-        return miniatureSaleRepository.findTopByClientNameOrderBySaleDateDesc(clientName)
-                .orElseThrow( () -> new ResourceNotFoundException("Miniature Sale of client:  " + clientName + " not found"));
+        return toResponseDTO(sale);
     }
 
     /*
      * Gets the last 10 sales
      */
-    public List<MiniatureSale> getLastSales(){
+    public List<MiniatureSaleResponseDTO> getLastSales(){
         List<MiniatureSale> sales = miniatureSaleRepository.findTop10ByOrderBySaleDateDesc();
         throwExceptionIfEmpty(sales, "Sales not found");
-        return sales;
+        return toResponseDTOList(sales);
     }
 
     /*
@@ -128,10 +120,6 @@ public class MiniatureSaleService {
 
         MiniatureSale savedSale = miniatureSaleRepository.save(sale);
         return toResponseDTO(savedSale);
-    }
-
-    public Optional<MiniatureSale> getMiniatureSaleById(Long id) {
-        return miniatureSaleRepository.findById(id);
     }
 
     public MiniatureSaleResponseDTO updateMiniatureSale(MiniatureSaleUpdateDTO dto, Long id) {

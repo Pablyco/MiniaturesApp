@@ -3,7 +3,6 @@ package com.example.miniatures.controller;
 import com.example.miniatures.dto.miniatureClient.MiniatureSaleCreateDTO;
 import com.example.miniatures.dto.miniatureClient.MiniatureSaleResponseDTO;
 import com.example.miniatures.dto.miniatureClient.MiniatureSaleUpdateDTO;
-import com.example.miniatures.model.MiniatureSale;
 import com.example.miniatures.model.enums.MiniatureScale;
 import com.example.miniatures.model.enums.MiniatureType;
 import com.example.miniatures.service.MiniatureSaleService;
@@ -55,24 +54,16 @@ public class MiniatureSaleController {
      * Gets a specific sale by its id.
      */
     @GetMapping("/sales/{id}")
-    public ResponseEntity<MiniatureSale> getSaleById(@PathVariable long id) {
+    public ResponseEntity<MiniatureSaleResponseDTO> getSaleById(@PathVariable long id) {
         return ResponseEntity.ok(miniatureSaleService.getSaleById(id));
-    }
-
-    /*
-     * Gets the last sale of a client.
-     */
-    @GetMapping("/sales/client/{clientName}/last")
-    public ResponseEntity<MiniatureSale> getLastSaleByClientName(@RequestParam String clientName) {
-        return ResponseEntity.ok(miniatureSaleService.getLastSaleByClientName(clientName));
     }
 
     /*
      * Gets the last 10 sales
      */
     @GetMapping("/sales/latest")
-    public ResponseEntity<List<MiniatureSale>> getLastSales(){
-        List<MiniatureSale> sales = miniatureSaleService.getLastSales();
+    public ResponseEntity<List<MiniatureSaleResponseDTO>> getLastSales(){
+        List<MiniatureSaleResponseDTO> sales = miniatureSaleService.getLastSales();
         return ResponseEntity.ok(sales);
     }
 
