@@ -5,6 +5,9 @@ import com.example.miniatures.dto.miniatureSale.MiniatureSaleResponseDTO;
 import com.example.miniatures.dto.miniatureSale.MiniatureSaleUpdateDTO;
 import com.example.miniatures.dto.miniatureSale.SalesFilterDTO;
 import com.example.miniatures.service.MiniatureSaleService;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -25,6 +28,14 @@ public class MiniatureSaleController {
     /*
      * Main Method to help you to obtain sales saved in database.
      */
+    @Operation(
+            summary = "Get miniature sales",
+            description = "Returns a list of miniature sales using optional filters such as type, scale, client ID, price ranges, and date ranges."
+    )
+    @ApiResponses({
+            @ApiResponse(responseCode = "200", description = "Sales successfully retrieved"),
+            @ApiResponse(responseCode = "400", description = "Invalid filter values"),
+    })
     @GetMapping("/sales")
     public ResponseEntity<List<MiniatureSaleResponseDTO>> getSales(SalesFilterDTO filters) {
         return ResponseEntity.ok(miniatureSaleService.getSales(filters));
@@ -33,6 +44,11 @@ public class MiniatureSaleController {
     /*
      * Gets a specific sale by its id.
      */
+    @Operation(summary = "Get sale by ID")
+    @ApiResponses({
+            @ApiResponse(responseCode = "200", description = "Sale found"),
+            @ApiResponse(responseCode = "404", description = "Sale not found")
+    })
     @GetMapping("/sales/{id}")
     public ResponseEntity<MiniatureSaleResponseDTO> getSaleById(@PathVariable long id) {
         return ResponseEntity.ok(miniatureSaleService.getSaleById(id));
@@ -41,6 +57,11 @@ public class MiniatureSaleController {
     /*
      * Gets the last 10 sales
      */
+    @Operation(summary = "Get a list of the lastest 10 sales")
+    @ApiResponses({
+            @ApiResponse(responseCode = "200", description = "Sale found"),
+            @ApiResponse(responseCode = "404", description = "Sale not found")
+    })
     @GetMapping("/sales/latest")
     public ResponseEntity<List<MiniatureSaleResponseDTO>> getLastSales(){
         return ResponseEntity.ok(miniatureSaleService.getLastSales());
@@ -49,6 +70,15 @@ public class MiniatureSaleController {
     /*
      * Creates a sale.
      */
+    @Operation(
+            summary = "Create a new miniature sale",
+            description = "Creates a miniature sale and returns a DTO as response"
+    )
+    @ApiResponses({
+            @ApiResponse(responseCode = "201", description = "Sale successfully created"),
+            @ApiResponse(responseCode = "400", description = "Invalid input data"),
+            @ApiResponse(responseCode = "404", description = "Client not found")
+    })
     @PostMapping("/sales")
     public ResponseEntity<MiniatureSaleResponseDTO> createSale(@Valid @RequestBody MiniatureSaleCreateDTO dto) {
         return ResponseEntity.status(201).body(miniatureSaleService.createMiniatureSale(dto));
@@ -57,6 +87,12 @@ public class MiniatureSaleController {
     /*
      * Update a specific sale by id.
      */
+
+    @Operation(summary = "Update a sale by ID")
+    @ApiResponses({
+            @ApiResponse(responseCode = "200", description = "Sale found"),
+            @ApiResponse(responseCode = "404", description = "Sale not found")
+    })
     @PutMapping("/sales/{id}")
     public ResponseEntity<MiniatureSaleResponseDTO> updateSaleById(@Valid @RequestBody MiniatureSaleUpdateDTO dto, @PathVariable Long id) {
         return ResponseEntity.ok(miniatureSaleService.updateMiniatureSale(dto,id));
@@ -65,6 +101,11 @@ public class MiniatureSaleController {
     /*
      * Delete a specific sale by id.
      */
+    @Operation(summary = "Delete a specific sale")
+    @ApiResponses({
+            @ApiResponse(responseCode = "204", description = "The Sale was successfully deleted"),
+            @ApiResponse(responseCode = "404", description = "Sale not found")
+    })
     @DeleteMapping("sales/{id}")
     public ResponseEntity<Void> deleteSaleByID(@PathVariable Long id) {
         miniatureSaleService.deleteMiniatureSale(id);
