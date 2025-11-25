@@ -4,15 +4,11 @@ import com.example.miniatures.dto.miniatureSale.MiniatureSaleCreateDTO;
 import com.example.miniatures.dto.miniatureSale.MiniatureSaleResponseDTO;
 import com.example.miniatures.dto.miniatureSale.MiniatureSaleUpdateDTO;
 import com.example.miniatures.dto.miniatureSale.SalesFilterDTO;
-import com.example.miniatures.model.enums.MiniatureScale;
-import com.example.miniatures.model.enums.MiniatureType;
 import com.example.miniatures.service.MiniatureSaleService;
 import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.math.BigDecimal;
-import java.time.LocalDate;
 import java.util.List;
 
 @RestController
