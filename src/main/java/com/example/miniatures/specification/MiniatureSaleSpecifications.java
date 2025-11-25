@@ -12,20 +12,6 @@ import java.time.LocalDate;
 
 public final class MiniatureSaleSpecifications {
 
-
-    public static Specification<MiniatureSale>hasType(MiniatureType type){
-        return (root, query, cb) ->{
-            if (type == null) return null;
-            return cb.equal(root.get("type"), type);
-        };
-    }
-
-    public static Specification<MiniatureSale> hasScale(MiniatureScale scale) {
-        return (root, query, cb) -> {
-            if (scale == null) return null;
-            return cb.equal(root.get("scale"), scale);
-        };
-    }
     public static Specification<MiniatureSale> hasTypeAndScale(MiniatureType type,MiniatureScale scale) {
         return (root, query, cb) -> {
             if (type == null && scale == null) return null;
@@ -42,20 +28,6 @@ public final class MiniatureSaleSpecifications {
         return (root, query, cb) -> {
             if (clientId == null) return null;
             return cb.equal(root.get("client").get("id"), clientId);
-        };
-    }
-
-    public static Specification<MiniatureSale> priceGreaterThan(BigDecimal price) {
-        return (root,query,cb) ->{
-            if (price == null) return null;
-            return cb.greaterThan(root.get("price"), price);
-        };
-    }
-
-    public static Specification<MiniatureSale> priceLessThan(BigDecimal price) {
-        return (root,query,cb) ->{
-            if (price == null) return null;
-            return cb.lessThan(root.get("price"), price);
         };
     }
 
@@ -77,10 +49,4 @@ public final class MiniatureSaleSpecifications {
             return cb.between(datePath, start, end);
         };
     }
-
-
-
-
-
-
 }
