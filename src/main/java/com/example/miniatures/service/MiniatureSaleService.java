@@ -34,8 +34,8 @@ public class MiniatureSaleService {
          *
          * New updated method with .unrestricted();
          */
-        Specification<MiniatureSale> spec = Specification.unrestricted();
 
+        Specification<MiniatureSale> spec = Specification.unrestricted();
 
         if(filters.getType() != null ||  filters.getScale() != null) {
             spec = spec.and(MiniatureSaleSpecifications.hasTypeAndScale(filters.getType(), filters.getScale()));
@@ -78,10 +78,20 @@ public class MiniatureSaleService {
     }
 
     /*
-     * Create a new Miniature.
+     * Gets the sales of a client
+     */
+    public List<MiniatureSaleResponseDTO> getSalesByClientId(Long clientId) {
+        miniatureClientService.getClientEntityById(clientId);
+        List<MiniatureSale> sales = miniatureSaleRepository.findByClientId(clientId);
+        return toResponseDTOList(sales);
+    }
+
+
+    /*
+     * Create a new Miniature Sale.
      */
     public MiniatureSaleResponseDTO createMiniatureSale(MiniatureSaleCreateDTO dto) {
-        MiniatureClient client = miniatureClientService.getClientById(dto.getClientId());
+        MiniatureClient client = miniatureClientService.getClientEntityById(dto.getClientId());
         MiniatureSale sale = new MiniatureSale();
 
         mapDtoToSale(dto,sale,client);
@@ -95,7 +105,7 @@ public class MiniatureSaleService {
         MiniatureSale foundSale = miniatureSaleRepository.findById(id)
                 .orElseThrow( ()-> new ResourceNotFoundException("Miniature sale with ID " + id + " not found"));
 
-        MiniatureClient client = miniatureClientService.getClientById(dto.getClientId());
+        MiniatureClient client = miniatureClientService.getClientEntityById(dto.getClientId());
 
         mapDtoToSale(dto,foundSale,client);
 
