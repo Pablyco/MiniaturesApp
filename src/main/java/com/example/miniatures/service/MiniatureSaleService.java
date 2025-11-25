@@ -71,7 +71,9 @@ public class MiniatureSaleService {
      */
     public List<MiniatureSaleResponseDTO> getLastSales(){
         List<MiniatureSale> sales = miniatureSaleRepository.findTop10ByOrderBySaleDateDesc();
-        throwExceptionIfEmpty(sales, "Sales not found");
+        if (sales.isEmpty()) {
+            throw new ResourceNotFoundException("Sales not found");
+        }
         return toResponseDTOList(sales);
     }
 
@@ -105,12 +107,6 @@ public class MiniatureSaleService {
         MiniatureSale sale = miniatureSaleRepository.findById(id)
                 .orElseThrow( ()-> new ResourceNotFoundException("Miniature sale with ID " + id + " not found"));
         miniatureSaleRepository.delete(sale);
-    }
-
-    private static void throwExceptionIfEmpty(List<MiniatureSale> sales, String message) {
-        if (sales.isEmpty()) {
-            throw new ResourceNotFoundException(message);
-        }
     }
 
     private static MiniatureSaleResponseDTO toResponseDTO(MiniatureSale sale){
