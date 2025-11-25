@@ -1,11 +1,11 @@
-﻿package com.example.miniatures.dto.miniatureSale;
+package com.example.miniatures.dto.miniatureSale;
 
+import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.*;
 
-@AllArgsConstructor
-@NoArgsConstructor
 @Getter
 @Setter
+@Schema(description = "DTO used to create a miniature sale")
 public class MiniatureSaleCreateDTO extends MiniatureSaleBaseDTO{
 
 
