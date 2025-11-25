@@ -1,4 +1,4 @@
-﻿package com.example.miniatures.dto.miniatureClient;
+﻿package com.example.miniatures.dto.miniatureSale;
 
 import com.example.miniatures.model.enums.MiniatureScale;
 import com.example.miniatures.model.enums.MiniatureType;

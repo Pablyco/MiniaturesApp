@@ -1,4 +1,4 @@
-﻿package com.example.miniatures.dto.miniatureClient;
+﻿package com.example.miniatures.dto.miniatureSale;
 
 import lombok.*;
 

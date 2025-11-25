@@ -1,4 +1,4 @@
-﻿package com.example.miniatures.dto.miniatureClient;
+﻿package com.example.miniatures.dto.miniatureSale;
 
 import com.example.miniatures.model.enums.MiniatureScale;
 import com.example.miniatures.model.enums.MiniatureType;
@@ -39,7 +39,7 @@ public abstract class MiniatureSaleBaseDTO {
     MiniatureScale scale;
 
     @NotNull(message = "Client ID is obligatory")
-    @Positive@Positive(message = "Client ID should be greater than zero '0' ")
+    @Positive(message = "Client ID should be greater than zero '0' ")
     Long clientId;
 
 }
