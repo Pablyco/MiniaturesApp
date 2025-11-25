@@ -1,5 +1,10 @@
 package com.example.miniatures.service;
 
+import com.example.miniatures.dto.miniatureClient.MiniatureClientBaseDTO;
+import com.example.miniatures.dto.miniatureClient.MiniatureClientCreateDTO;
+import com.example.miniatures.dto.miniatureClient.MiniatureClientResponseDTO;
+import com.example.miniatures.dto.miniatureClient.MiniatureClientUpdateDTO;
+import com.example.miniatures.dto.miniatureSale.MiniatureSaleBaseDTO;
 import com.example.miniatures.exception.ResourceNotFoundException;
 import com.example.miniatures.model.MiniatureClient;
 import com.example.miniatures.model.MiniatureSale;
@@ -17,31 +22,30 @@ public class MiniatureClientService {
         this.miniatureClientRepository = miniatureClientRepository;
     }
 
-    public List<MiniatureClient> getClients() {
-        return miniatureClientRepository.findAll();
+    public List<MiniatureClientResponseDTO> getClients() {
+        return toResponseDTOList(miniatureClientRepository.findAll());
     }
 
-    public MiniatureClient getClientById(long id) {
-        return miniatureClientRepository.findById(id)
+    public MiniatureClientResponseDTO getClientById(long id) {
+        MiniatureClient client = miniatureClientRepository.findById(id)
                 .orElseThrow( ()-> new ResourceNotFoundException("Client with ID " + id + " not found"));
+        return toResponseDTO(client);
 
     }
 
-    public MiniatureClient createMiniatureClient(MiniatureClient miniatureClient) {
-        return miniatureClientRepository.save(miniatureClient);
+    public MiniatureClientResponseDTO createMiniatureClient(MiniatureClientCreateDTO dto) {
+        MiniatureClient client = new MiniatureClient();
+        mapDtoToClient(dto, client);
+        MiniatureClient savedClient = miniatureClientRepository.save(client);
+        return toResponseDTO(savedClient);
     }
 
-    public MiniatureClient updateMiniatureClient(MiniatureClient client, long id) {
-        return miniatureClientRepository.findById(id)
-                .map(MiniatureClient->{
-
-                    MiniatureClient.setName(client.getName());
-                    MiniatureClient.setEmail(client.getEmail());
-                    MiniatureClient.setPhoneNumber( client.getPhoneNumber());
-                    MiniatureClient.setSales(client.getSales());
-                    return  miniatureClientRepository.save(MiniatureClient);
-
-        }).orElseThrow( ()-> new ResourceNotFoundException("Client with ID " + id + " not found"));
+    public MiniatureClientResponseDTO updateMiniatureClient(MiniatureClientUpdateDTO dto, long id) {
+        MiniatureClient client = miniatureClientRepository.findById(id)
+                .orElseThrow( ()-> new ResourceNotFoundException("Client with ID " + id + " not found"));
+        mapDtoToClient(dto, client);
+        MiniatureClient updatedClient = miniatureClientRepository.save(client);
+        return toResponseDTO(updatedClient);
     }
 
     public void deleteMiniatureClient(long id) {
@@ -49,5 +53,30 @@ public class MiniatureClientService {
                 .orElseThrow( ()-> new ResourceNotFoundException("Client with ID " + id + " not found"));
         miniatureClientRepository.delete(client);
     }
+
+    private static MiniatureClientResponseDTO toResponseDTO(MiniatureClient client){
+        MiniatureClientResponseDTO dto = new MiniatureClientResponseDTO();
+        dto.setName(client.getName());
+        dto.setEmail(client.getEmail());
+        dto.setPhoneNumber(client.getPhoneNumber());
+        return dto;
+    }
+
+    private static List<MiniatureClientResponseDTO> toResponseDTOList(List<MiniatureClient> clients){
+        return clients.stream().map(MiniatureClientService::toResponseDTO).toList();
+    }
+
+    private void mapDtoToClient(MiniatureClientBaseDTO dto, MiniatureClient client){
+        client.setName(dto.getName());
+        client.setEmail(dto.getEmail());
+        client.setPhoneNumber(dto.getPhoneNumber());
+    }
+
+    public MiniatureClient getClientEntityById(Long id) {
+        return miniatureClientRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Client with ID " + id + " not found"));
+    }
+
+
 }
 
