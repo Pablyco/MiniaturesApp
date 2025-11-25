@@ -1,7 +1,8 @@
-﻿package com.example.miniatures.dto.miniatureSale;
+package com.example.miniatures.dto.miniatureSale;
 
 import com.example.miniatures.model.enums.MiniatureScale;
 import com.example.miniatures.model.enums.MiniatureType;
+import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -13,6 +14,7 @@ import java.time.LocalDate;
 @AllArgsConstructor
 @NoArgsConstructor
 @Getter @Setter
+@Schema(description = "DTO used to make a sale response")
 public class MiniatureSaleResponseDTO{
 
     //sale information
