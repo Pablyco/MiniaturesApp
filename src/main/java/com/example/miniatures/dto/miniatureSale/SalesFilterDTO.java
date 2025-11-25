@@ -17,7 +17,7 @@ import java.time.LocalDate;
 @Getter
 @Setter
 @Schema(description = "Filter parameters for searching miniature sales")
-public abstract class SalesFilterDTO {
+public class SalesFilterDTO {
 
     @Schema(description = "Filter by miniature type", example = "WARHAMMER")
     MiniatureType type;
