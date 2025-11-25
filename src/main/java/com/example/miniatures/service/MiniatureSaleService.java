@@ -1,23 +1,15 @@
 package com.example.miniatures.service;
 
-import com.example.miniatures.dto.miniatureClient.MiniatureSaleBaseDTO;
-import com.example.miniatures.dto.miniatureClient.MiniatureSaleCreateDTO;
-import com.example.miniatures.dto.miniatureClient.MiniatureSaleResponseDTO;
-import com.example.miniatures.dto.miniatureClient.MiniatureSaleUpdateDTO;
+import com.example.miniatures.dto.miniatureSale.*;
 import com.example.miniatures.exception.ResourceNotFoundException;
 import com.example.miniatures.model.MiniatureClient;
 import com.example.miniatures.model.MiniatureSale;
-import com.example.miniatures.model.enums.MiniatureScale;
-import com.example.miniatures.model.enums.MiniatureType;
 import com.example.miniatures.repository.MiniatureSaleRepository;
 import com.example.miniatures.specification.MiniatureSaleSpecifications;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
-import java.math.BigDecimal;
-import java.time.LocalDate;
 import java.util.List;
-import java.util.Optional;
 
 @Service
 public class MiniatureSaleService {
@@ -36,17 +28,7 @@ public class MiniatureSaleService {
     /*
      * Main Method to help you to obtain sales saved in database.
      */
-    public List<MiniatureSaleResponseDTO> getSales(
-            MiniatureType type,
-            MiniatureScale scale,
-            Long clientId,
-            BigDecimal minPrice,
-            BigDecimal maxPrice,
-            BigDecimal priceGt,
-            BigDecimal priceLt,
-            LocalDate startDate,
-            LocalDate endDate
-    ){
+    public List<MiniatureSaleResponseDTO> getSales(SalesFilterDTO filters){
         /*
          * Specification<MiniatureSale> spec = Specification.where(null); Deprecated
          *
@@ -54,41 +36,25 @@ public class MiniatureSaleService {
          */
         Specification<MiniatureSale> spec = Specification.unrestricted();
 
-        if(type != null) {
-            spec = spec.and(MiniatureSaleSpecifications.hasType(type));
+
+        if(filters.getType() != null ||  filters.getScale() != null) {
+            spec = spec.and(MiniatureSaleSpecifications.hasTypeAndScale(filters.getType(), filters.getScale()));
         }
 
-        if(scale != null) {
-            spec = spec.and(MiniatureSaleSpecifications.hasScale(scale));
+        if(filters.getClientId() != null) {
+            spec = spec.and(MiniatureSaleSpecifications.hasClientId(filters.getClientId()));
         }
 
-        if(type != null ||  scale != null) {
-            spec = spec.and(MiniatureSaleSpecifications.hasTypeAndScale(type, scale));
+        if(filters.getMinPrice() != null || filters.getMaxPrice() != null){
+            spec = spec.and(MiniatureSaleSpecifications.priceBetween(filters.getMinPrice(), filters.getMaxPrice()));
         }
 
-        if(clientId != null) {
-            spec = spec.and(MiniatureSaleSpecifications.hasClientId(clientId));
-        }
-
-        if(minPrice != null || maxPrice != null){
-            spec = spec.and(MiniatureSaleSpecifications.priceBetween(minPrice,maxPrice));
-        }
-
-        if(priceGt != null){
-            spec = spec.and(MiniatureSaleSpecifications.priceGreaterThan(priceGt));
-        }
-
-        if(priceLt != null){
-            spec = spec.and(MiniatureSaleSpecifications.priceLessThan(priceLt));
-        }
-
-        if (startDate != null || endDate != null) {
-            spec = spec.and(MiniatureSaleSpecifications.saleDateBetween(startDate,endDate));
+        if (filters.getStartDate() != null || filters.getEndDate() != null) {
+            spec = spec.and(MiniatureSaleSpecifications.saleDateBetween(filters.getStartDate(), filters.getEndDate()));
         }
 
         List<MiniatureSale> sales = miniatureSaleRepository.findAll(spec);
         return toResponseDTOList(sales);
-
     }
 
     /*

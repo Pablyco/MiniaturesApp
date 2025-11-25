@@ -1,8 +1,9 @@
 package com.example.miniatures.controller;
 
-import com.example.miniatures.dto.miniatureClient.MiniatureSaleCreateDTO;
-import com.example.miniatures.dto.miniatureClient.MiniatureSaleResponseDTO;
-import com.example.miniatures.dto.miniatureClient.MiniatureSaleUpdateDTO;
+import com.example.miniatures.dto.miniatureSale.MiniatureSaleCreateDTO;
+import com.example.miniatures.dto.miniatureSale.MiniatureSaleResponseDTO;
+import com.example.miniatures.dto.miniatureSale.MiniatureSaleUpdateDTO;
+import com.example.miniatures.dto.miniatureSale.SalesFilterDTO;
 import com.example.miniatures.model.enums.MiniatureScale;
 import com.example.miniatures.model.enums.MiniatureType;
 import com.example.miniatures.service.MiniatureSaleService;
@@ -29,25 +30,8 @@ public class MiniatureSaleController {
      * Main Method to help you to obtain sales saved in database.
      */
     @GetMapping("/sales")
-    public ResponseEntity<List<MiniatureSaleResponseDTO>> getSales(
-            @RequestParam(required = false) MiniatureType type,
-            @RequestParam(required = false) MiniatureScale scale,
-            @RequestParam(required = false) Long clientId,
-            @RequestParam(required = false) BigDecimal minPrice,
-            @RequestParam(required = false) BigDecimal maxPrice,
-            @RequestParam(required = false) BigDecimal priceGt,
-            @RequestParam(required = false) BigDecimal priceLt,
-            @RequestParam(required = false) LocalDate startDate,
-            @RequestParam(required = false) LocalDate endDate
-
-    ) {
-        var sales = miniatureSaleService.getSales(
-                type,scale,clientId,
-                minPrice,maxPrice,priceGt,
-                priceLt,startDate, endDate
-        );
-        return ResponseEntity.ok(sales);
-
+    public ResponseEntity<List<MiniatureSaleResponseDTO>> getSales(SalesFilterDTO filters) {
+        return ResponseEntity.ok(miniatureSaleService.getSales(filters));
     }
 
     /*
@@ -63,8 +47,7 @@ public class MiniatureSaleController {
      */
     @GetMapping("/sales/latest")
     public ResponseEntity<List<MiniatureSaleResponseDTO>> getLastSales(){
-        List<MiniatureSaleResponseDTO> sales = miniatureSaleService.getLastSales();
-        return ResponseEntity.ok(sales);
+        return ResponseEntity.ok(miniatureSaleService.getLastSales());
     }
 
     /*
@@ -72,8 +55,7 @@ public class MiniatureSaleController {
      */
     @PostMapping("/sales")
     public ResponseEntity<MiniatureSaleResponseDTO> createSale(@Valid @RequestBody MiniatureSaleCreateDTO dto) {
-        MiniatureSaleResponseDTO saleCreated = miniatureSaleService.createMiniatureSale(dto);
-        return ResponseEntity.status(201).body(saleCreated);
+        return ResponseEntity.status(201).body(miniatureSaleService.createMiniatureSale(dto));
     }
 
     /*
@@ -81,8 +63,7 @@ public class MiniatureSaleController {
      */
     @PutMapping("/sales/{id}")
     public ResponseEntity<MiniatureSaleResponseDTO> updateSaleById(@Valid @RequestBody MiniatureSaleUpdateDTO dto, @PathVariable Long id) {
-        MiniatureSaleResponseDTO updatedSale = miniatureSaleService.updateMiniatureSale(dto,id);
-        return ResponseEntity.ok(updatedSale);
+        return ResponseEntity.ok(miniatureSaleService.updateMiniatureSale(dto,id));
     }
 
     /*
