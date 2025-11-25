@@ -12,4 +12,5 @@ import java.util.Optional;
 public interface MiniatureSaleRepository extends JpaRepository<MiniatureSale, Long> , JpaSpecificationExecutor<MiniatureSale> {
     Optional<MiniatureSale> findTopByClientNameOrderBySaleDateDesc(String clientName);
     List<MiniatureSale> findTop10ByOrderBySaleDateDesc();
+    List<MiniatureSale> findByClientId(Long clientId);
 }
