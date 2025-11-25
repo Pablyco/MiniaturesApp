@@ -1,4 +1,4 @@
-﻿package com.example.miniatures.dto.miniatureSale;
+package com.example.miniatures.dto.miniatureSale;
 
 import com.example.miniatures.model.enums.MiniatureScale;
 import com.example.miniatures.model.enums.MiniatureType;
@@ -18,7 +18,6 @@ import java.time.LocalDate;
 @NoArgsConstructor
 @Getter
 @Setter
-
 public abstract class MiniatureSaleBaseDTO {
 
     @NotBlank(message = "Miniature name cant be empty")
