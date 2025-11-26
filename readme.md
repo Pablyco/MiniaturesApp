@@ -3,10 +3,10 @@
 ### A clean & scalable Spring Boot REST API for managing clients and sales
 
 
-  <img src="https://img.shields.io/badge/Spring%20Boot-3.x-6DB33F?style=for-the-badge&logo=springboot&logoColor=white" alt="Spring boot 3.X"/>
-  <img src="https://img.shields.io/badge/Java-17-007396?style=for-the-badge&logo=openjdk&logoColor=white" alt="Java 17"/>
-  <img src="https://img.shields.io/badge/Build-Maven-C71A36?style=for-the-badge&logo=apachemaven&logoColor=white" alt="Build Maven"/>
-  <img src="https://img.shields.io/badge/Tests-JUnit%205-25A162?style=for-the-badge&logo=junit5&logoColor=white" alt="JUNIT 5"/>
+  <img align="left" width="30px" style="padding-right:10px;"src="https://img.shields.io/badge/Spring%20Boot-3.x-6DB33F?style=for-the-badge&logo=springboot&logoColor=white" alt="Spring boot 3.X"/>
+  <img align="left" width="30px" style="padding-right:10px;"src="https://img.shields.io/badge/Java-17-007396?style=for-the-badge&logo=openjdk&logoColor=white" alt="Java 17"/>
+  <img align="left" width="30px" style="padding-right:10px;"src="https://img.shields.io/badge/Build-Maven-C71A36?style=for-the-badge&logo=apachemaven&logoColor=white" alt="Build Maven"/>
+  <img align="left" width="30px" style="padding-right:10px;"src="https://img.shields.io/badge/Tests-JUnit%205-25A162?style=for-the-badge&logo=junit5&logoColor=white" alt="JUNIT 5"/>
 
 
 ---
