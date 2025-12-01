@@ -43,8 +43,6 @@ public class MiniatureSaleServiceTest {
     @Test
     void createMiniatureSale_withValidData_returnsResponseDto(){
 
-        //Arrange.
-        //Fake DTO.
         MiniatureSaleCreateDTO dto = new MiniatureSaleCreateDTO();
         dto.setName("Emperor of Mankind");
         dto.setPrice(new BigDecimal("15000"));
@@ -53,22 +51,15 @@ public class MiniatureSaleServiceTest {
         dto.setScale(MiniatureScale.LARGE_170MM);
         dto.setClientId(1L);
 
-        /*
-         * Fake client.
-         */
         MiniatureClient client = new MiniatureClient();
         client.setId(1L);
         client.setName("Pablyco");
         client.setPhoneNumber(666);
         client.setEmail("pablyco@mail.com");
 
-        //When getClientEntityById "1" take the fake client
         when(miniatureClientService.getClientEntityById(1L))
                 .thenReturn(client);
 
-        /*
-         * Fake saved sale.
-         */
         MiniatureSale savedSale = new MiniatureSale();
         savedSale.setId(10L);
         savedSale.setName(dto.getName());
@@ -78,51 +69,26 @@ public class MiniatureSaleServiceTest {
         savedSale.setScale(dto.getScale());
         savedSale.setClient(client); // <-- IMPORTANT: required by mapper.
 
-        //When save a miniature sale take the fake one.
         when(miniatureSaleRepository.save(any(MiniatureSale.class)))
                 .thenReturn(savedSale);
 
-        //Act.
         MiniatureSaleResponseDTO resultDto = miniatureSaleService.createMiniatureSale(dto);
 
-        //Verify.
-
-        // The result dto has the expected name.
         assertEquals("Emperor of Mankind", resultDto.getName());
-
-        // The result dto has the expected price.
         assertEquals(new BigDecimal("15000"), resultDto.getPrice());
-
-        // The result dto has the expected client id.
         assertEquals(1L, resultDto.getClientId());
-
-        // The result dto has the expected client name (me :D )
         assertEquals("Pablyco", resultDto.getClientName());
-
-        // The result dto has the expected miniature type
         assertEquals(MiniatureType.WARHAMMER, resultDto.getType());
-
-        // The result dto has the expected scale
         assertEquals(MiniatureScale.LARGE_170MM, resultDto.getScale());
 
 
-         // If the client service NEVER called getClientEntityById(...) or if the number of invocations is greater than 1, the test fails.
         verify(miniatureClientService, times(1)).getClientEntityById(1L);
-
-        // If the sale repository NEVER called save method(...) or if the number of invocations is greater than 1, the test fails. It should save once.
         verify(miniatureSaleRepository, times(1)).save(any(MiniatureSale.class));
 
     }
 
     @Test
     void getAllSales(){
-        //Arrange.
-
-        /*
-         * Fake client that our sales will use.
-         * The mapper requires sale.getClient().getId() and getName(),
-         * so the client MUST be present, or the test will crash.
-         */
 
         MiniatureClient client = new MiniatureClient();
         client.setId(999L);
@@ -137,7 +103,6 @@ public class MiniatureSaleServiceTest {
         sale1.setScale(MiniatureScale.LARGE_170MM);
         sale1.setClient(client); // <-- IMPORTANT: required by mapper
 
-
         MiniatureSale sale2 = new MiniatureSale();
         sale2.setId(2L);
         sale2.setName("Horus Lupercal");
@@ -147,46 +112,23 @@ public class MiniatureSaleServiceTest {
         sale2.setScale(MiniatureScale.SMALL_45MM);
         sale2.setClient(client);
 
-        /*
-         * These filters are empty, so the service will return ALL sales.
-         */
         SalesFilterDTO filters = new SalesFilterDTO();
 
-        /*
-         * Our service calls repository.findAll(spec),
-         * so we need to mock findAll(Specification).
-         *
-         * any(Specification.class) tells Mockito:
-         * "No matter what spec you pass, return this list."
-         */
         when(miniatureSaleRepository.findAll(
                 ArgumentMatchers.<Specification<MiniatureSale>>any()
         )).thenReturn(Arrays.asList(sale1, sale2));
 
-        //Act
-
         List<MiniatureSaleResponseDTO> dtos = miniatureSaleService.getSales(filters);
 
-        //Verify
-
-        // We got 2 sales
         assertEquals(2, dtos.size());
-
-        // The first sale has the expected price.
         assertEquals(new BigDecimal("15000"), dtos.get(0).getPrice());
-
-        // The second sale has the expected price.
         assertEquals(new BigDecimal("25000"), dtos.get(1).getPrice());
-
-        // The second sale scale matches.
         assertEquals(MiniatureScale.SMALL_45MM, dtos.get(1).getScale());
 
-        /*
-         * This checks the interaction with the mock.
-         * If the service NEVER called findAll(spec), the test fails.
-         */
         verify(miniatureSaleRepository, times(1))
                 .findAll(ArgumentMatchers.<Specification<MiniatureSale>>any());
 
     }
+
+
 }
