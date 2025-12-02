@@ -2,6 +2,7 @@ package com.example.miniatures.service.sales;
 
 import com.example.miniatures.dto.miniatureSale.MiniatureSaleCreateDTO;
 import com.example.miniatures.dto.miniatureSale.MiniatureSaleResponseDTO;
+import com.example.miniatures.dto.miniatureSale.MiniatureSaleUpdateDTO;
 import com.example.miniatures.dto.miniatureSale.SalesFilterDTO;
 import com.example.miniatures.model.MiniatureClient;
 import com.example.miniatures.model.MiniatureSale;
@@ -86,7 +87,6 @@ public class MiniatureSaleServiceTest {
 
         verify(miniatureClientService, times(1)).getClientEntityById(1L);
         verify(miniatureSaleRepository, times(1)).save(any(MiniatureSale.class));
-
     }
 
     @Test
@@ -129,7 +129,6 @@ public class MiniatureSaleServiceTest {
 
         verify(miniatureSaleRepository, times(1))
                 .findAll(ArgumentMatchers.<Specification<MiniatureSale>>any());
-
     }
 
     @Test
@@ -157,8 +156,6 @@ public class MiniatureSaleServiceTest {
         assertEquals(MiniatureScale.LARGE_170MM, dto.getScale());
 
         verify(miniatureSaleRepository, times(1)).findById(1L);
-
-
     }
 
     @Test
@@ -220,7 +217,6 @@ public class MiniatureSaleServiceTest {
 
         verify(miniatureSaleRepository, times(1)).findById(1L);
         verify(miniatureSaleRepository, times(1)).delete(sale1);
-
     }
 
     @Test
@@ -233,6 +229,48 @@ public class MiniatureSaleServiceTest {
         verify(miniatureSaleRepository, never()).deleteById(anyLong());
     }
 
+    @Test
+    void updateSaleSuccessfully(){
+        MiniatureClient client = new MiniatureClient();
+        client.setId(1L);
+        client.setName("Test Client");
+
+        MiniatureSale sale1 = new MiniatureSale();
+        sale1.setId(1L);
+        sale1.setName("Emperor of Mankind");
+        sale1.setPrice(new BigDecimal("15000"));
+        sale1.setSaleDate(LocalDate.now());
+        sale1.setType(MiniatureType.WARHAMMER);
+        sale1.setScale(MiniatureScale.LARGE_170MM);
+        sale1.setClient(client);
+
+        MiniatureSale saleUpdated = new MiniatureSale();
+        saleUpdated.setId(1L);
+        saleUpdated.setName("Horus Lupercal");
+        saleUpdated.setPrice(new BigDecimal("25000"));
+        saleUpdated.setSaleDate(LocalDate.now());
+        saleUpdated.setType(MiniatureType.WARHAMMER);
+        saleUpdated.setScale(MiniatureScale.SMALL_45MM);
+        saleUpdated.setClient(client);
+
+        MiniatureSaleUpdateDTO dto = new MiniatureSaleUpdateDTO();
+        dto.setName("Horus Lupercal");
+        dto.setPrice(new BigDecimal("25000"));
+        dto.setSaleDate(LocalDate.now());
+        dto.setType(MiniatureType.WARHAMMER);
+        dto.setScale(MiniatureScale.SMALL_45MM);
 
 
+        when(miniatureSaleRepository.findById(1L)).thenReturn(Optional.of(sale1));
+        when(miniatureSaleRepository.save(any(MiniatureSale.class))).thenReturn(saleUpdated);
+
+        MiniatureSaleResponseDTO result = miniatureSaleService.updateMiniatureSale(dto,1L);
+
+        assertEquals("Horus Lupercal",  result.getName());
+        assertEquals(new BigDecimal("25000"), result.getPrice());
+
+
+        verify(miniatureSaleRepository, times(1)).findById(1L);
+        verify(miniatureSaleRepository, times(1)).save(any(MiniatureSale.class));
+    }
 }
