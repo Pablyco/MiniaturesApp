@@ -227,7 +227,7 @@ public class MiniatureSaleServiceTest {
     void deleteSaleNotFound(){
         when(miniatureSaleRepository.findById(1L)).thenReturn(Optional.empty());
 
-        assertThrows(RuntimeException.class, () -> {miniatureSaleService.deleteMiniatureSale(1L);});
+        assertThrows(RuntimeException.class, () -> miniatureSaleService.deleteMiniatureSale(1L));
 
         verify(miniatureSaleRepository, times(1)).findById(1L);
         verify(miniatureSaleRepository, never()).deleteById(anyLong());
