@@ -22,6 +22,7 @@ import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.ArgumentMatchers.any;
@@ -129,6 +130,63 @@ public class MiniatureSaleServiceTest {
                 .findAll(ArgumentMatchers.<Specification<MiniatureSale>>any());
 
     }
+
+    @Test
+    void getAllSalesById(){
+
+        MiniatureClient client = new MiniatureClient();
+        client.setId(999L);
+        client.setName("Test Client");
+
+        MiniatureSale sale1 = new MiniatureSale();
+        sale1.setId(1L);
+        sale1.setName("Emperor of Mankind");
+        sale1.setPrice(new BigDecimal("15000"));
+        sale1.setSaleDate(LocalDate.now());
+        sale1.setType(MiniatureType.WARHAMMER);
+        sale1.setScale(MiniatureScale.LARGE_170MM);
+        sale1.setClient(client);
+
+        when(miniatureSaleRepository.findById(1L)).thenReturn(Optional.of(sale1));
+    }
+
+    @Test
+    void getAllSalesByClient(){
+        MiniatureClient client = new MiniatureClient();
+        client.setId(1L);
+        client.setName("Test Client");
+
+        MiniatureSale sale1 = new MiniatureSale();
+        sale1.setId(1L);
+        sale1.setName("Emperor of Mankind");
+        sale1.setPrice(new BigDecimal("15000"));
+        sale1.setSaleDate(LocalDate.now());
+        sale1.setType(MiniatureType.WARHAMMER);
+        sale1.setScale(MiniatureScale.LARGE_170MM);
+        sale1.setClient(client);
+
+        MiniatureSale sale2 = new MiniatureSale();
+        sale2.setId(2L);
+        sale2.setName("Horus Lupercal");
+        sale2.setPrice(new BigDecimal("25000"));
+        sale2.setSaleDate(LocalDate.now());
+        sale2.setType(MiniatureType.WARHAMMER);
+        sale2.setScale(MiniatureScale.SMALL_45MM);
+        sale2.setClient(client);
+
+        when(miniatureSaleRepository.findByClientId(1L)).thenReturn(Arrays.asList(sale1, sale2));
+
+        List<MiniatureSaleResponseDTO> dtos = miniatureSaleService.getSalesByClientId(1L);
+
+        assertEquals(2, dtos.size());
+        assertEquals(new BigDecimal("15000"), dtos.get(0).getPrice());
+        assertEquals(new BigDecimal("25000"), dtos.get(1).getPrice());
+        assertEquals(MiniatureScale.SMALL_45MM, dtos.get(1).getScale());
+        assertEquals(MiniatureScale.LARGE_170MM, dtos.get(0).getScale());
+
+        verify(miniatureSaleRepository, times(1)).findByClientId(1L);
+    }
+
 
 
 }
