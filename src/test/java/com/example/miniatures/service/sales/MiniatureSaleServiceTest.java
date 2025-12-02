@@ -198,5 +198,28 @@ public class MiniatureSaleServiceTest {
     }
 
 
+    @Test
+    void deleteSale(){
+        MiniatureClient client = new MiniatureClient();
+        client.setId(1L);
+        client.setName("Test Client");
+
+        MiniatureSale sale1 = new MiniatureSale();
+        sale1.setId(1L);
+        sale1.setName("Emperor of Mankind");
+        sale1.setPrice(new BigDecimal("15000"));
+        sale1.setSaleDate(LocalDate.now());
+        sale1.setType(MiniatureType.WARHAMMER);
+        sale1.setScale(MiniatureScale.LARGE_170MM);
+        sale1.setClient(client);
+
+        when(miniatureSaleRepository.findById(1L)).thenReturn(Optional.of(sale1));
+
+        miniatureSaleService.deleteMiniatureSale(1L);
+
+        verify(miniatureSaleRepository, times(1)).findById(1L);
+        verify(miniatureSaleRepository, times(1)).delete(sale1);
+
+    }
 
 }
