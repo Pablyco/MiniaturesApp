@@ -25,6 +25,7 @@ import java.util.List;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
 
@@ -199,7 +200,7 @@ public class MiniatureSaleServiceTest {
 
 
     @Test
-    void deleteSale(){
+    void deleteSaleSuccessfully(){
         MiniatureClient client = new MiniatureClient();
         client.setId(1L);
         client.setName("Test Client");
@@ -221,5 +222,17 @@ public class MiniatureSaleServiceTest {
         verify(miniatureSaleRepository, times(1)).delete(sale1);
 
     }
+
+    @Test
+    void deleteSaleNotFound(){
+        when(miniatureSaleRepository.findById(1L)).thenReturn(Optional.empty());
+
+        assertThrows(RuntimeException.class, () -> {miniatureSaleService.deleteMiniatureSale(1L);});
+
+        verify(miniatureSaleRepository, times(1)).findById(1L);
+        verify(miniatureSaleRepository, never()).deleteById(anyLong());
+    }
+
+
 
 }
