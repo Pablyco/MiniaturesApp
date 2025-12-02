@@ -273,4 +273,17 @@ public class MiniatureSaleServiceTest {
         verify(miniatureSaleRepository, times(1)).findById(1L);
         verify(miniatureSaleRepository, times(1)).save(any(MiniatureSale.class));
     }
+
+    @Test
+    void updateSaleNotFound(){
+
+        MiniatureSaleUpdateDTO dto = new MiniatureSaleUpdateDTO();
+
+        when(miniatureSaleRepository.findById(1L)).thenReturn(Optional.empty());
+
+        assertThrows(RuntimeException.class,() -> miniatureSaleService.updateMiniatureSale(dto,1L) );
+
+        verify(miniatureSaleRepository, times(1)).findById(1L);
+        verify(miniatureSaleRepository, never()).save(any(MiniatureSale.class));
+    }
 }
