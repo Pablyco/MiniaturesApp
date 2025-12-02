@@ -148,6 +148,16 @@ public class MiniatureSaleServiceTest {
         sale1.setClient(client);
 
         when(miniatureSaleRepository.findById(1L)).thenReturn(Optional.of(sale1));
+
+        MiniatureSaleResponseDTO dto = miniatureSaleService.getSaleById(1L);
+
+        assertEquals("Emperor of Mankind", dto.getName());
+        assertEquals(new BigDecimal("15000"), dto.getPrice());
+        assertEquals(MiniatureScale.LARGE_170MM, dto.getScale());
+
+        verify(miniatureSaleRepository, times(1)).findById(1L);
+
+
     }
 
     @Test
