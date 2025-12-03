@@ -23,11 +23,7 @@ public class MiniatureSaleController {
         this.miniatureSaleService = miniatureSaleService;
     }
 
-    // *** Miniature sales find methods ***
 
-    /*
-     * Main Method to help you to obtain sales saved in database.
-     */
     @Operation(
             summary = "Get miniature sales",
             description = "Returns a list of miniature sales using optional filters such as type, scale, client ID, price ranges, and date ranges."
@@ -41,9 +37,6 @@ public class MiniatureSaleController {
         return ResponseEntity.ok(miniatureSaleService.getSales(filters));
     }
 
-    /*
-     * Gets a specific sale by its id.
-     */
     @Operation(summary = "Get sale by ID")
     @ApiResponses({
             @ApiResponse(responseCode = "200", description = "Sale found"),
@@ -54,9 +47,6 @@ public class MiniatureSaleController {
         return ResponseEntity.ok(miniatureSaleService.getSaleById(id));
     }
 
-    /*
-     * Gets the last 10 sales
-     */
     @Operation(summary = "Get a list of the lastest 10 sales")
     @ApiResponses({
             @ApiResponse(responseCode = "200", description = "Sale found"),
@@ -67,9 +57,6 @@ public class MiniatureSaleController {
         return ResponseEntity.ok(miniatureSaleService.getLastSales());
     }
 
-    /*
-     * Creates a sale.
-     */
     @Operation(
             summary = "Create a new miniature sale",
             description = "Creates a miniature sale and returns a DTO as response"
@@ -84,10 +71,6 @@ public class MiniatureSaleController {
         return ResponseEntity.status(201).body(miniatureSaleService.createMiniatureSale(dto));
     }
 
-    /*
-     * Update a specific sale by id.
-     */
-
     @Operation(summary = "Update a sale by ID")
     @ApiResponses({
             @ApiResponse(responseCode = "200", description = "Sale found"),
@@ -98,9 +81,6 @@ public class MiniatureSaleController {
         return ResponseEntity.ok(miniatureSaleService.updateMiniatureSale(dto,id));
     }
 
-    /*
-     * Delete a specific sale by id.
-     */
     @Operation(summary = "Delete a specific sale")
     @ApiResponses({
             @ApiResponse(responseCode = "204", description = "The Sale was successfully deleted"),
@@ -111,5 +91,4 @@ public class MiniatureSaleController {
         miniatureSaleService.deleteMiniatureSale(id);
         return ResponseEntity.noContent().build();
     }
-
 }
