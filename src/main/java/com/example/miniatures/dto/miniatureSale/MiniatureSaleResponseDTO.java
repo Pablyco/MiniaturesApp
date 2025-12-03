@@ -17,7 +17,6 @@ import java.time.LocalDate;
 @Schema(description = "DTO used to make a sale response")
 public class MiniatureSaleResponseDTO{
 
-    //sale information
     private Long id;
     private String name;
     private BigDecimal price;
@@ -25,7 +24,6 @@ public class MiniatureSaleResponseDTO{
     private MiniatureType type;
     private MiniatureScale scale;
 
-    //Client information
     private Long clientId;
     private String clientName;
 }
