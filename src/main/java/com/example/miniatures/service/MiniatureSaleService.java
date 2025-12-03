@@ -23,16 +23,11 @@ public class MiniatureSaleService {
     }
 
 
-     // *** Miniature sales find/get methods ***
-
-    /*
-     * Main Method to help you to obtain sales saved in database.
-     */
     public List<MiniatureSaleResponseDTO> getSales(SalesFilterDTO filters){
         /*
-         * Specification<MiniatureSale> spec = Specification.where(null); Deprecated
+         * Specification<MiniatureSale> spec = Specification.where(null); is deprecated
          *
-         * New updated method with .unrestricted();
+         * Updated method with .unrestricted();
          */
 
         Specification<MiniatureSale> spec = Specification.unrestricted();
@@ -57,18 +52,12 @@ public class MiniatureSaleService {
         return toResponseDTOList(sales);
     }
 
-    /*
-     * Gets a specific sale by its id.
-     */
     public MiniatureSaleResponseDTO getSaleById(long id) {
         MiniatureSale sale = miniatureSaleRepository.findById(id)
                 .orElseThrow( ()-> new ResourceNotFoundException("Miniature Sale with ID " + id + " not found"));
         return toResponseDTO(sale);
     }
 
-    /*
-     * Gets the last 10 sales
-     */
     public List<MiniatureSaleResponseDTO> getLastSales(){
         List<MiniatureSale> sales = miniatureSaleRepository.findTop10ByOrderBySaleDateDesc();
         if (sales.isEmpty()) {
@@ -77,9 +66,6 @@ public class MiniatureSaleService {
         return toResponseDTOList(sales);
     }
 
-    /*
-     * Gets the sales of a client
-     */
     public List<MiniatureSaleResponseDTO> getSalesByClientId(Long clientId) {
         miniatureClientService.getClientEntityById(clientId);
         List<MiniatureSale> sales = miniatureSaleRepository.findByClientId(clientId);
@@ -87,9 +73,6 @@ public class MiniatureSaleService {
     }
 
 
-    /*
-     * Create a new Miniature Sale.
-     */
     public MiniatureSaleResponseDTO createMiniatureSale(MiniatureSaleCreateDTO dto) {
         MiniatureClient client = miniatureClientService.getClientEntityById(dto.getClientId());
         MiniatureSale sale = new MiniatureSale();
