@@ -16,6 +16,7 @@ import java.util.List;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
@@ -70,6 +71,14 @@ public class MiniatureClientServiceTest {
         assertEquals("John", clientDto.getName());
         assertEquals("john@mail.com", clientDto.getEmail());
         assertEquals(12345, clientDto.getPhoneNumber());
+
+        verify(repository,times(1)).findById(1L);
+    }
+    @Test
+    void getClientByIdNotFound(){
+        when(repository.findById(1L)).thenReturn(Optional.empty());
+
+        assertThrows(RuntimeException.class, () -> service.getClientById(1L));
 
         verify(repository,times(1)).findById(1L);
     }
