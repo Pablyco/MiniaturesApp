@@ -1,5 +1,6 @@
 package com.example.miniatures.service.client;
 
+import com.example.miniatures.dto.miniatureClient.MiniatureClientCreateDTO;
 import com.example.miniatures.dto.miniatureClient.MiniatureClientResponseDTO;
 import com.example.miniatures.model.MiniatureClient;
 import com.example.miniatures.repository.MiniatureClientRepository;
@@ -71,6 +72,31 @@ public class MiniatureClientServiceTest {
         assertEquals(12345, clientDto.getPhoneNumber());
 
         verify(repository,times(1)).findById(1L);
+    }
+
+    @Test
+    void createClient_withValidData()
+    {
+        MiniatureClientCreateDTO dto = new MiniatureClientCreateDTO();
+        dto.setName("John");
+        dto.setEmail("john@mail");
+        dto.setPhoneNumber(12345);
+
+        MiniatureClient savedClient = new MiniatureClient();
+        savedClient.setId(1L);
+        savedClient.setName(dto.getName());
+        savedClient.setEmail(dto.getEmail());
+        savedClient.setPhoneNumber(dto.getPhoneNumber());
+
+        when(repository.save(any(MiniatureClient.class))).thenReturn(savedClient);
+
+        MiniatureClientResponseDTO resultDto = service.createMiniatureClient(dto);
+
+        assertEquals("John", resultDto.getName());
+        assertEquals("john@mail",  resultDto.getEmail());
+        assertEquals(12345, resultDto.getPhoneNumber());
+
+        verify(repository,times(1)).save(any(MiniatureClient.class));
     }
 
 }
