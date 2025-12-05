@@ -12,6 +12,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.*;
@@ -52,4 +53,24 @@ public class MiniatureClientServiceTest {
 
         verify(repository,times(1)).findAll();
     }
+
+    @Test
+    void getClientById(){
+        MiniatureClient miniatureClient = new MiniatureClient();
+        miniatureClient.setId(1L);
+        miniatureClient.setName("John");
+        miniatureClient.setEmail("john@mail.com");
+        miniatureClient.setPhoneNumber(12345);
+
+        when(repository.findById(1L)).thenReturn(Optional.of(miniatureClient));
+
+        MiniatureClientResponseDTO clientDto = service.getClientById(1L);
+
+        assertEquals("John", clientDto.getName());
+        assertEquals("john@mail.com", clientDto.getEmail());
+        assertEquals(12345, clientDto.getPhoneNumber());
+
+        verify(repository,times(1)).findById(1L);
+    }
+
 }
