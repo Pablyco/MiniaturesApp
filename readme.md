@@ -38,13 +38,13 @@
 * DTO-based request/response structure
 * Service layer separation
 
-### Documentation :construction: WIP :construction:
+### Documentation
 
 * Full **Swagger / OpenAPI** auto-generated docs
 * Clear project structure
 * DTOs, entities, services fully separated
 
-### Tests :construction: WIP :construction:
+### Tests
 
 * **Mockito** service tests
 * **JUnit 5** unit tests
