@@ -84,8 +84,7 @@ public class MiniatureClientServiceTest {
     }
 
     @Test
-    void createClient_withValidData()
-    {
+    void createClient_withValidData() {
         MiniatureClientCreateDTO dto = new MiniatureClientCreateDTO();
         dto.setName("John");
         dto.setEmail("john@mail");
@@ -108,4 +107,19 @@ public class MiniatureClientServiceTest {
         verify(repository,times(1)).save(any(MiniatureClient.class));
     }
 
+    @Test
+    void deleteClient_withValidData() {
+        MiniatureClient miniatureClient = new MiniatureClient();
+        miniatureClient.setId(1L);
+        miniatureClient.setName("John");
+        miniatureClient.setEmail("john@mail.com");
+        miniatureClient.setPhoneNumber(12345);
+
+        when(repository.findById(1L)).thenReturn(Optional.of(miniatureClient));
+
+        service.deleteMiniatureClient(1L);
+
+        verify(repository,times(1)).findById(1L);
+        verify(repository,times(1)).delete(miniatureClient);
+    }
 }
