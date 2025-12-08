@@ -122,4 +122,15 @@ public class MiniatureClientServiceTest {
         verify(repository,times(1)).findById(1L);
         verify(repository,times(1)).delete(miniatureClient);
     }
+
+    @Test
+    void deleteClient_withNotFound(){
+
+        when(repository.findById(1L)).thenReturn(Optional.empty());
+
+        assertThrows(RuntimeException.class, () -> service.deleteMiniatureClient(1L));
+
+        verify(repository,times(1)).findById(1L);
+        verify(repository,never()).delete(any());
+    }
 }
