@@ -10,9 +10,9 @@
 	</parent>
 	<groupId>com.example</groupId>
 	<artifactId>miniatures</artifactId>
-	<version>0.0.1-SNAPSHOT</version>
-	<name>miniatures</name>
-	<description>App to track selling Miniatures side hustle</description>
+	<version>0.0.1</version>
+	<name>miniature_app</name>
+	<description>Miniature app is a tool to track selling miniatures for my side hustle</description>
 	<url/>
 	<licenses>
 		<license/>
@@ -41,7 +41,7 @@
 		<dependency>
 			<groupId>com.h2database</groupId>
 			<artifactId>h2</artifactId>
-			<scope>runtime</scope>
+			<scope>test</scope>
 		</dependency>
 		<dependency>
 			<groupId>org.projectlombok</groupId>
