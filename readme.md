@@ -7,6 +7,9 @@
   <img src="https://img.shields.io/badge/Java-17-007396?style=for-the-badge&logo=openjdk&logoColor=white" alt="Java 17"/>
   <img src="https://img.shields.io/badge/Build-Maven-C71A36?style=for-the-badge&logo=apachemaven&logoColor=white" alt="Build Maven"/>
   <img src="https://img.shields.io/badge/Tests-JUnit%205-25A162?style=for-the-badge&logo=junit5&logoColor=white" alt="JUNIT 5"/>
+  <img src="https://img.shields.io/badge/Docker-Ready-2496ED?style=for-the-badge&logo=docker&logoColor=white" alt="Docker Ready"/>
+  <img src="https://img.shields.io/badge/Swagger-API%20Docs-85EA2D?style=for-the-badge&logo=swagger&logoColor=white"  alt="Swagger" />
+  <img src="https://img.shields.io/badge/PostgreSQL-DB-4169E1?style=for-the-badge&logo=postgresql&logoColor=white" alt="PostgreSQL" />
 </p>
 
 
@@ -14,7 +17,9 @@
 ---
 
 > [!NOTE]  
-> This project was done for learning and practice.
+> This project was developed as a hands-on learning experience focused on building clean, 
+> scalable backend services using Spring Boot, Docker, PostgreSQL, 
+> and modern development practices.
 ---
 
 ## **Features**
@@ -38,6 +43,12 @@
 * DTO-based request/response structure
 * Service layer separation
 
+### Spring Security + JWT Authentication :construction: WIP :construction:
+
+* Spring Security integration 
+* JWT-based authentication 
+* Endpoint protection and role-based access
+
 ### Documentation
 
 * Full **Swagger / OpenAPI** auto-generated docs
@@ -49,6 +60,16 @@
 * **Mockito** service tests
 * **JUnit 5** unit tests
 * **MockMvc** controller tests
+
+---
+
+## Docker & Deployment
+
+This project is fully **Dockerized** and ready for deployment.
+
+- Uses `eclipse-temurin:17-jdk` as the base image
+- Includes a production-ready Dockerfile
+- Successfully tested on cloud platforms such as **Render**
 
 ---
 
@@ -74,21 +95,21 @@ src/main/java/com.example.miniatures
 
 ## Client Endpoints
 
-| Method | Endpoint              | Description        |
-| ------ | --------------------- |--------------------|
-| POST   | `/clients`            | Create new client  |
-| GET    | `/clients`            | List all clients   |
-| GET    | `/clients/{id}`       | Get client info    |
-| GET    | `/clients/{id}/sales` | Get client sales   |
-| PUT    | `/clients/{id}`       | Update client      |
-| DELETE | `/clients/{id}`       | Delete client      |
+| Method | Endpoint              | Description       |
+|--------|-----------------------|-------------------|
+| POST   | `/clients`            | Create new client |
+| GET    | `/clients`            | List all clients  |
+| GET    | `/clients/{id}`       | Get client info   |
+| GET    | `/clients/{id}/sales` | Get client sales  |
+| PUT    | `/clients/{id}`       | Update client     |
+| DELETE | `/clients/{id}`       | Delete client     |
 
 ---
 
 ## Sales Endpoints
 
 | Method | Endpoint        | Description          |
-| ------ |-----------------|----------------------|
+|--------|-----------------|----------------------|
 | POST   | `/sales`        | Create new sale      |
 | GET    | `/sales`        | List or filter sales |
 | GET    | `/sales/latest` | List latest 10 sales |
@@ -150,6 +171,20 @@ http://localhost:8080/h2-console
 
 ---
 
+# Database Config (PostgreSQL Example)
+
+```properties
+spring.datasource.url=${DB_URL}
+spring.datasource.username=${DB_USERNAME}
+spring.datasource.password=${DB_PASSWORD}
+
+spring.jpa.hibernate.ddl-auto=update
+spring.jpa.show-sql=true
+spring.jpa.properties.hibernate.dialect=org.hibernate.dialect.PostgreSQLDialect
+spring.jpa.properties.hibernate.format_sql=true
+```
+
+
 # Example JSON
 
 ### Create Client
@@ -158,7 +193,7 @@ http://localhost:8080/h2-console
 {
   "name": "John Example",
   "email": "john@example.com",
-  "phone": "555-1234"
+  "phone": 5551234
 }
 ```
 
@@ -168,7 +203,7 @@ http://localhost:8080/h2-console
 {
   "name": "Space Marine",
   "price": 20,
-  "date": "2025-01-11",
+  "saleDate": "2025-01-11",
   "scale": "MEDIUM_100MM",
   "type": "WARHAMMER",
   "clientId":1
@@ -179,14 +214,18 @@ http://localhost:8080/h2-console
 
 # Tech Stack
 
-| Layer    | Technology        |
-| -------- |-------------------|
-| Backend  | Spring Boot 3     |
-| Language | Java 17           |
-| Docs     | Springdoc OpenAPI |
-| Database | H2                |
-| Build    | Maven             |
-| Tests    | JUnit 5 + Mockito |
+| Layer    | Technology                |
+|----------|---------------------------|
+| Backend  | Spring Boot 3             |
+| Language | Java 17                   |
+| Docs     | Springdoc OpenAPI         |
+| Database | PostgreSQL + H2 for tests |
+| Build    | Maven                     |
+| Tests    | JUnit 5 + Mockito         |
+| Deploy   | Docker                    |
+
+
+
 
 
 ---
