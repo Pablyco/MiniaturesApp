@@ -95,21 +95,21 @@ src/main/java/com.example.miniatures
 
 ## Client Endpoints
 
-| Method | Endpoint              | Description        |
-| ------ | --------------------- |--------------------|
-| POST   | `/clients`            | Create new client  |
-| GET    | `/clients`            | List all clients   |
-| GET    | `/clients/{id}`       | Get client info    |
-| GET    | `/clients/{id}/sales` | Get client sales   |
-| PUT    | `/clients/{id}`       | Update client      |
-| DELETE | `/clients/{id}`       | Delete client      |
+| Method | Endpoint              | Description       |
+|--------|-----------------------|-------------------|
+| POST   | `/clients`            | Create new client |
+| GET    | `/clients`            | List all clients  |
+| GET    | `/clients/{id}`       | Get client info   |
+| GET    | `/clients/{id}/sales` | Get client sales  |
+| PUT    | `/clients/{id}`       | Update client     |
+| DELETE | `/clients/{id}`       | Delete client     |
 
 ---
 
 ## Sales Endpoints
 
 | Method | Endpoint        | Description          |
-| ------ |-----------------|----------------------|
+|--------|-----------------|----------------------|
 | POST   | `/sales`        | Create new sale      |
 | GET    | `/sales`        | List or filter sales |
 | GET    | `/sales/latest` | List latest 10 sales |
@@ -171,6 +171,20 @@ http://localhost:8080/h2-console
 
 ---
 
+# Database Config (PostgreSQL Example)
+
+```properties
+spring.datasource.url=${DB_URL}
+spring.datasource.username=${DB_USERNAME}
+spring.datasource.password=${DB_PASSWORD}
+
+spring.jpa.hibernate.ddl-auto=update
+spring.jpa.show-sql=true
+spring.jpa.properties.hibernate.dialect=org.hibernate.dialect.PostgreSQLDialect
+spring.jpa.properties.hibernate.format_sql=true
+```
+
+
 # Example JSON
 
 ### Create Client
@@ -200,14 +214,18 @@ http://localhost:8080/h2-console
 
 # Tech Stack
 
-| Layer    | Technology        |
-| -------- |-------------------|
-| Backend  | Spring Boot 3     |
-| Language | Java 17           |
-| Docs     | Springdoc OpenAPI |
-| Database | H2                |
-| Build    | Maven             |
-| Tests    | JUnit 5 + Mockito |
+| Layer    | Technology                |
+|----------|---------------------------|
+| Backend  | Spring Boot 3             |
+| Language | Java 17                   |
+| Docs     | Springdoc OpenAPI         |
+| Database | PostgreSQL + H2 for tests |
+| Build    | Maven                     |
+| Tests    | JUnit 5 + Mockito         |
+| Deploy   | Docker                    |
+
+
+
 
 
 ---
