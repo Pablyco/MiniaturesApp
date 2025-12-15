@@ -43,10 +43,10 @@
 * DTO-based request/response structure
 * Service layer separation
 
-### Spring Security + JWT Authentication :construction: WIP :construction:
+### Spring Security + JWT Authentication 
 
 * Spring Security integration 
-* JWT-based authentication 
+* JWT-based authentication :construction: WIP :construction:
 * Endpoint protection and role-based access
 
 ### Documentation
@@ -85,6 +85,7 @@ src/main/java/com.example.miniatures
 ├── model
 │   ├── enums
 ├── repository
+├── security
 ├── service
 └── MiniaturesApplication.java
 ```
