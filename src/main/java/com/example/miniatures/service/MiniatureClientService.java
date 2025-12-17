@@ -5,6 +5,7 @@ import com.example.miniatures.dto.miniatureClient.MiniatureClientCreateDTO;
 import com.example.miniatures.dto.miniatureClient.MiniatureClientResponseDTO;
 import com.example.miniatures.dto.miniatureClient.MiniatureClientUpdateDTO;
 import com.example.miniatures.dto.miniatureSale.MiniatureSaleBaseDTO;
+import com.example.miniatures.exception.ClientNotFoundException;
 import com.example.miniatures.exception.ResourceNotFoundException;
 import com.example.miniatures.model.MiniatureClient;
 import com.example.miniatures.model.MiniatureSale;
@@ -28,7 +29,7 @@ public class MiniatureClientService {
 
     public MiniatureClientResponseDTO getClientById(long id) {
         MiniatureClient client = miniatureClientRepository.findById(id)
-                .orElseThrow( ()-> new ResourceNotFoundException("Client with ID " + id + " not found"));
+                .orElseThrow( ()-> new ClientNotFoundException("Client with ID " + id + " not found"));
         return toResponseDTO(client);
 
     }
@@ -42,7 +43,7 @@ public class MiniatureClientService {
 
     public MiniatureClientResponseDTO updateMiniatureClient(MiniatureClientUpdateDTO dto, long id) {
         MiniatureClient client = miniatureClientRepository.findById(id)
-                .orElseThrow( ()-> new ResourceNotFoundException("Client with ID " + id + " not found"));
+                .orElseThrow( ()-> new ClientNotFoundException("Client with ID " + id + " not found"));
         mapDtoToClient(dto, client);
         MiniatureClient updatedClient = miniatureClientRepository.save(client);
         return toResponseDTO(updatedClient);
@@ -50,7 +51,7 @@ public class MiniatureClientService {
 
     public void deleteMiniatureClient(long id) {
         MiniatureClient client = miniatureClientRepository.findById(id)
-                .orElseThrow( ()-> new ResourceNotFoundException("Client with ID " + id + " not found"));
+                .orElseThrow( ()-> new ClientNotFoundException("Client with ID " + id + " not found"));
         miniatureClientRepository.delete(client);
     }
 
@@ -74,7 +75,7 @@ public class MiniatureClientService {
 
     public MiniatureClient getClientEntityById(Long id) {
         return miniatureClientRepository.findById(id)
-                .orElseThrow(() -> new ResourceNotFoundException("Client with ID " + id + " not found"));
+                .orElseThrow(() -> new ClientNotFoundException("Client with ID " + id + " not found"));
     }
 
 
