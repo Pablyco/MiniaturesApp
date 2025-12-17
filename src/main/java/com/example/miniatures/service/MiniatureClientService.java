@@ -4,11 +4,8 @@ import com.example.miniatures.dto.miniatureClient.MiniatureClientBaseDTO;
 import com.example.miniatures.dto.miniatureClient.MiniatureClientCreateDTO;
 import com.example.miniatures.dto.miniatureClient.MiniatureClientResponseDTO;
 import com.example.miniatures.dto.miniatureClient.MiniatureClientUpdateDTO;
-import com.example.miniatures.dto.miniatureSale.MiniatureSaleBaseDTO;
 import com.example.miniatures.exception.ClientNotFoundException;
-import com.example.miniatures.exception.ResourceNotFoundException;
 import com.example.miniatures.model.MiniatureClient;
-import com.example.miniatures.model.MiniatureSale;
 import com.example.miniatures.repository.MiniatureClientRepository;
 import org.springframework.stereotype.Service;
 
