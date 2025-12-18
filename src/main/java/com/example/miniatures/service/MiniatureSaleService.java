@@ -1,7 +1,7 @@
 package com.example.miniatures.service;
 
 import com.example.miniatures.dto.miniatureSale.*;
-import com.example.miniatures.exception.ResourceNotFoundException;
+import com.example.miniatures.exception.SaleNotFoundException;
 import com.example.miniatures.model.MiniatureClient;
 import com.example.miniatures.model.MiniatureSale;
 import com.example.miniatures.repository.MiniatureSaleRepository;
@@ -54,14 +54,14 @@ public class MiniatureSaleService {
 
     public MiniatureSaleResponseDTO getSaleById(long id) {
         MiniatureSale sale = miniatureSaleRepository.findById(id)
-                .orElseThrow( ()-> new ResourceNotFoundException("Miniature Sale with ID " + id + " not found"));
+                .orElseThrow( ()-> new SaleNotFoundException("Miniature Sale with ID " + id + " not found"));
         return toResponseDTO(sale);
     }
 
     public List<MiniatureSaleResponseDTO> getLastSales(){
         List<MiniatureSale> sales = miniatureSaleRepository.findTop10ByOrderBySaleDateDesc();
         if (sales.isEmpty()) {
-            throw new ResourceNotFoundException("Sales not found");
+            throw new SaleNotFoundException("Sales not found");
         }
         return toResponseDTOList(sales);
     }
@@ -86,7 +86,7 @@ public class MiniatureSaleService {
     public MiniatureSaleResponseDTO updateMiniatureSale(MiniatureSaleUpdateDTO dto, Long id) {
 
         MiniatureSale foundSale = miniatureSaleRepository.findById(id)
-                .orElseThrow( ()-> new ResourceNotFoundException("Miniature sale with ID " + id + " not found"));
+                .orElseThrow( ()-> new SaleNotFoundException("Miniature sale with ID " + id + " not found"));
 
         MiniatureClient client = miniatureClientService.getClientEntityById(dto.getClientId());
 
@@ -98,7 +98,7 @@ public class MiniatureSaleService {
 
     public void deleteMiniatureSale(Long id) {
         MiniatureSale sale = miniatureSaleRepository.findById(id)
-                .orElseThrow( ()-> new ResourceNotFoundException("Miniature sale with ID " + id + " not found"));
+                .orElseThrow( ()-> new SaleNotFoundException("Miniature sale with ID " + id + " not found"));
         miniatureSaleRepository.delete(sale);
     }
 
